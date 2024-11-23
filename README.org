@@ -1,0 +1,45 @@
+#+title: Readme
+* Ordnerstruktur
+Die Ordnerstruktur sollte wie folgt sein:
+#+begin_src shell
+$ tree -L 1
+├── 2.3
+├── 3.4
+    ├── status.csv
+    └── status.xlsx
+├── multi_feedback_2.3
+└── multi_feedback_3.4
+    ├── status.csv
+    └── status.xlsx
+#+end_src
+Wobei multi_feedback_ die Ordner sind, in denen die Korrekturen und das Feedback
+reingeschrieben wird (Kommentare). 2.3/3.4 sind die "Originalordner", von "Alle
+Abgaben Herunterladen" + unzip (Alle Abgabenordner der Personen sind dann auf
+Top-Level da drin).
+* Ausführen
+Das Tool kann in einem beliebigen Ordner liegen und von da aus mit python
+ausgeführt werden, z.B.
+#+begin_src shell
+python3 ~/Studium/tutor_tooling/autograde.py
+#+end_src
+* Syntax
+** \text{COMMENT}
+#+begin_src java
+// COMMENT An sich eine fast-korrekte Lösung, ...
+// ... mehr Erklärung
+//
+#+end_src
+- Ein "COMMENT" Block am Anfang der Zeile in irgendeiner Datei ist das Feedback,
+  welches in das "notice" Feld eingetragen wird (// und COMMENT werden natürlich
+  nicht inkludiert)
+** Punkte verteilen?
+#+begin_src java
+// +1 Korrekte Implementierung von run :)
+#+end_src
+- Punkte werden mit Kommentaren, die mit einem "+" beginnen zugewiesen. Also
+  z.B. ~// +1 Korrekte Implementierung von run~. Ein Kommentar ~// +<Zahl>~ wird
+  als Punktzahl gewertet; alle "+1" Kommentare werden addiert und als "Note"
+  gewertet
+- Kommentare, die mit einer negativen Zahl beginnen, werden auch gezählt (die 3.
+  Spalte bei der Info-Ausgabe), jedoch nicht von der Note abgezogen (effektiv
+  "0P/Kommentar")

@@ -34,11 +34,12 @@ python3 ~/Studium/tutor_tooling/autograde.py
   nicht inkludiert)
 ** Punkte verteilen?
 #+begin_src java
-// +1 Korrekte Implementierung von run :)
+// +1.5 Korrekte Implementierung von run :)
+// +1 Thread...
 #+end_src
 - Punkte werden mit Kommentaren, die mit einem "+" beginnen zugewiesen. Also
   z.B. ~// +1 Korrekte Implementierung von run~. Ein Kommentar ~// +<Zahl>~ wird
-  als Punktzahl gewertet; alle "+1" Kommentare werden addiert und als "Note"
+  als Punktzahl gewertet; alle "+n" Kommentare werden addiert und als "Note"
   gewertet
 - Kommentare, die mit einer negativen Zahl beginnen, werden auch gezählt (die 3.
   Spalte bei der Info-Ausgabe), jedoch nicht von der Note abgezogen (effektiv

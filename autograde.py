@@ -1,3 +1,4 @@
+#!/bin/env python3
 import csv
 from dataclasses import dataclass
 import difflib
@@ -18,7 +19,7 @@ def user_warning(message: str):
 
 
 def in_submission_corr_folder_p():
-    return os.path.basename(os.getcwd()).startswith("multi_feedback_") and os.path.isfile("status.xlsx")
+    return os.path.basename(os.getcwd()).startswith("multi_feedback_") and os.path.isfile("status.csv")
 
 
 def find_original_file(abspath_corr_folder: str):
@@ -147,6 +148,13 @@ def sum_submission(sub: SubmissionDir):
     return pos_sum, any_comment
 
 
+def _df_map_update(df: pd.DataFrame, key_column: str, value_column: str, mapping: dict, ty):
+    """Update value_column with the keys from key_column (mapped through mapping)"""
+    df[value_column] = df[key_column].map(mapping).fillna(df[value_column]).astype(ty)
+def _df_key_set(df: pd.DataFrame, key_column, value_column, keys: set, value):
+    """Set the value_column to value, if the key_column is in keys"""
+    df.loc[df[key_column].isin(keys), value_column] = value
+
 def sum_submissions():
     id2grade = {}
     id2comment = {}
@@ -157,11 +165,10 @@ def sum_submissions():
 
     file = "status.csv"
     old_df = pd.read_csv(file, quoting=csv.QUOTE_ALL, keep_default_na=False)
-    old_df["mark"] = old_df["usr_id"].map(id2grade).fillna(old_df["mark"]).astype(float)
-    old_df["notice"] = (
-        old_df["usr_id"].map(id2comment).fillna(old_df["notice"]).astype(str)
-    )
-    old_df.loc[old_df["usr_id"].isin(id2grade.keys()), "status"] = "passed"
+    _df_map_update(old_df, "usr_id", "mark", id2grade, float)
+    _df_map_update(old_df, "usr_id", "notice", id2comment, str)
+    _df_key_set(old_df, "usr_id", "status", id2grade.keys(), "passed")
+    _df_key_set(old_df, "usr_id", "update", id2grade.keys(), 1)
     old_df.to_csv(file, quoting=csv.QUOTE_ALL, header=True, index=False)
 
 
